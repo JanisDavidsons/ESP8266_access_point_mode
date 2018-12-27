@@ -1,3 +1,3 @@
 # ESP8266
-Test code for ESP8266 microcontroller.
-It doesn`t do anything yet.
+Code for ESP8266 microcontroller. Control functions through Internet.
+
