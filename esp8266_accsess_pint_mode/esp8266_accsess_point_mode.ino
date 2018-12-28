@@ -32,13 +32,6 @@ void loop() {
 	server.handleClient();							// Listen for HTTP requests from clients
 }
 
-//void handleRoot(){
-//	server.send(200, "text/html", "<form action=\"/login\" method=\"POST\">"
-//									<input type=\"text\" name=\"username\" placeholder\"Username\
-//									"<input type=\"password\" name \"password\" placeholder \"Password\"> </br>	"
-//									"<input type=\"submit\" value=\"Login\">	</form>	"
-//									"<p>Welcome to Janis Davidsons microcontroller server! Please log in.</p> ");		// When URI / is requested, send a web page with a button to toggle the LED
-//}
 
 void handleRoot() {                          // When URI / is requested, send a web page with a button to toggle the LED
   server.send(200, "text/html", "<form action=\"/login\" method=\"POST\">		<input type=\"text\" name=\"username\" placeholder=\"Username\"></br>		<input type=\"password\" name=\"password\" placeholder=\"Password\"></br>		<input type=\"submit\" value=\"Login\"></form><p>Welcome to Janis Davidsons microcontroller server! Please log in.</p>");
