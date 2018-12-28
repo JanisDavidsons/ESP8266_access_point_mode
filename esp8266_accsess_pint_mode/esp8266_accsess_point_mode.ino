@@ -9,7 +9,7 @@ const int led = 2;
 
 void handleRoot();					// function prototypes for HTTP handlers
 void handleNotFound();				// function prototypes for HTTP handlers
-void handleLogin();
+void handleLED();
 
 
 void setup()
