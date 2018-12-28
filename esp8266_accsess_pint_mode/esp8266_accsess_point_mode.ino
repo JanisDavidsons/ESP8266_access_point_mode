@@ -9,7 +9,7 @@ const int led = 2;
 
 void handleRoot();					// function prototypes for HTTP handlers
 void handleNotFound();				// function prototypes for HTTP handlers
-void handleLED();
+void handleLogin();
 
 
 void setup()
@@ -22,7 +22,7 @@ void setup()
   Serial.println(WiFi.softAPIP());
 
   server.on("/",HTTP_GET, handleRoot);				// Call the 'handleRoot' function when a client requests URI "/"
-  server.on("/LED", HTTP_POST, handleLED);			// Call the 'handleLED' function when a POST request is made to URI "/LED"
+  server.on("/login", HTTP_POST, handleLogin);			// Call the 'handleLED' function when a POST request is made to URI "/LED"
   server.onNotFound(handleNotFound);
   server.begin();									// Actually start the server
   Serial.println("HTML server started!");
@@ -32,17 +32,29 @@ void loop() {
 	server.handleClient();							// Listen for HTTP requests from clients
 }
 
-void handleRoot(){
-	server.send(200, "text/html", "<form action=\"/LED\" method=\"POST\"><input type=\"submit\" value=\"Toggle LED\"></form>");		// When URI / is requested, send a web page with a button to toggle the LED
+//void handleRoot(){
+//	server.send(200, "text/html", "<form action=\"/login\" method=\"POST\">"
+//									<input type=\"text\" name=\"username\" placeholder\"Username\
+//									"<input type=\"password\" name \"password\" placeholder \"Password\"> </br>	"
+//									"<input type=\"submit\" value=\"Login\">	</form>	"
+//									"<p>Welcome to Janis Davidsons microcontroller server! Please log in.</p> ");		// When URI / is requested, send a web page with a button to toggle the LED
+//}
+
+void handleRoot() {                          // When URI / is requested, send a web page with a button to toggle the LED
+  server.send(200, "text/html", "<form action=\"/login\" method=\"POST\">		<input type=\"text\" name=\"username\" placeholder=\"Username\"></br>		<input type=\"password\" name=\"password\" placeholder=\"Password\"></br>		<input type=\"submit\" value=\"Login\"></form><p>Welcome to Janis Davidsons microcontroller server! Please log in.</p>");
 }
 
-void handleLED(){									// If a POST request is made to URI /LED
-	digitalWrite(led, !digitalRead(led));		 	// Change the state of the LED
-	server.sendHeader("Location", "/");				// Add a header to respond with a new location for the browser to go to the home page again
-	server.send(303);								// Send it back to the browser with an HTTP status 303 (See Other) to redirect
-	Serial.println("LED is now: ");
-	Serial.print("\t");
-	Serial.print(digitalRead(led));
+void handleLogin(){									// If a POST request is made to URI /login
+	if( ! server.hasArg("username") || ! server.hasArg("password") || server.arg("username") == NULL || server.arg("password") == NULL){		// If the POST request doesn't have username and password data
+		server.send(400, "text/plain", "404: Invalid request");		// The request is invalid, so send HTTP status 400
+		return;
+	}
+	if(server.arg("username") == "Janis Davidsons" && server.arg("password") == "zzvzvh6m"){
+		server.send(200, "text/html", "<h1>Welcome, " + server.arg("username") + "!</h1><p>Login successful</p>");
+	}else {
+		server.send(401, "text/plain", "401 Unauthorised");			//Username and password don't match
+	}
+
 }
 
 void handleNotFound(){
